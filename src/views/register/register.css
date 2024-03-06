@@ -1,0 +1,153 @@
+.register {
+    width: 100vw;
+    height: 100vh;
+    background-color: #f0f2f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginboxTitle {
+    justify-content: center;
+    margin-left: 205px;
+    padding: 0 20px 20px 20px;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.loginWrapper {
+    width: 70%;
+    height: 70%;
+    display: flex;
+    justify-content: center;
+}
+
+.loginLeft,
+.loginRight {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.loginLogo {
+    font-size: 50px;
+    font-weight: 800;
+    color: #f21856;
+    margin-bottom: 10px;
+}
+
+.loginDesc {
+    font-size: 24px;
+}
+
+.loginBox {
+    height: 540px;
+    width: 600px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.loginInput {
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid gray;
+    font-size: 18px;
+    padding-left: 20px;
+}
+
+.loginInput:focus {
+    outline: none;
+}
+
+.loginButton {
+    height: 50px;
+    border-radius: 10px;
+    border: none;
+    background-color: #333;
+    color: white;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.loginForgot {
+    text-align: center;
+    color: #f21856;
+}
+
+.loginRegisterButton {
+    width: 60%;
+    align-self: center;
+    height: 50px;
+    border-radius: 10px;
+    border: none;
+    background-color: rgb(110, 112, 114);
+    color: white;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .loginWrapper {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: auto;
+    }
+
+    .loginLeft,
+    .loginRight {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .loginLogo {
+        font-size: 50px;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .loginDesc {
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .loginInput {
+        font-size: 16px;
+    }
+
+    .loginButton,
+    .loginRegisterButton {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .loginWrapper {
+        width: 100%;
+        height: auto;
+    }
+
+    .loginLogo {
+        font-size: 24px;
+    }
+
+    .loginDesc {
+        font-size: 14px;
+    }
+
+    .loginInput {
+        font-size: 14px;
+    }
+
+    .loginButton,
+    .loginRegisterButton {
+        font-size: 16px;
+    }
+}

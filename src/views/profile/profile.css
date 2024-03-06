@@ -1,0 +1,84 @@
+.profile-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.profile-content {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    /* Space above the buttons */
+}
+
+.profile-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* .profile-button:hover {
+    background-color: #ddd;
+} */
+
+.update-user {
+    color: white;
+    background-color: #333;
+}
+
+.update-user:hover {
+    background-color: rgb(121, 116, 116);
+}
+
+.change-password {
+    background-color: #333;
+    color: white;
+}
+
+.change-password:hover {
+
+    background-color: rgb(121, 116, 116);
+}
+
+.logout {
+    background-color: #ef162c;
+    color: white;
+}
+
+.logout:hover {
+    background-color: #ce4452;
+}
+
+.modal {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
