@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import Login from "./views/login/Login";
 import Register from "./views/register/Register";
 import Home from "./views/home/Home";
-import { loginSuccess } from '../src/actions/AuthActions'
+import { loginSuccess } from '../src/redux/actions/AuthActions'
 import { useDispatch, useSelector } from "react-redux";
 import {
   BrowserRouter,
@@ -13,10 +13,10 @@ import {
   Route,
 
 } from "react-router-dom"
-import ProductList from './components/productList/ProductList';
 import ProductDetails from './components/productDetails/ProductDetails';
 import { Toaster } from 'react-hot-toast';
 import Profile from './views/profile/Profile';
+import HomeOrRegister from './components/HomeOrRegister/HomeOrRegister';
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -34,14 +34,14 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route exact path='/' element={user ? <Home /> : <Register />}></Route>
-          <Route exact path='/login' element={user ? <Home /> : <Login />}></Route>
-          <Route exact path='/register' element={<Register />}></Route>
-          <Route exact path="/product/:id" element={<ProductDetails />}></Route>
-          <Route exact path="/profile/:username" element={<Profile />} ></Route>
+          <Route path="/" element={<HomeOrRegister />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/profile/:username" element={<Profile />} />
         </Routes>
         <Toaster />
-      </BrowserRouter >
+      </BrowserRouter>
     </>
   );
 }

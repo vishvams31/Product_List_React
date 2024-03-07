@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { checkEmailUniqueness, handleClick } from '../../services/Service';
 import toast from "react-hot-toast";
+import regex from "../../constants/Regex"
+import message from "../../constants/Message";
 
 export default function Register() {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -12,7 +14,7 @@ export default function Register() {
         const email = watch('email')
         const isEmailUnique = checkEmailUniqueness(email)
         if (!isEmailUnique) {
-            toast.error("Email is already in use")
+            toast.error(message.EMAIL_ALREADY_USED)
             return
         }
         await handleClick(data, navigate);
@@ -22,14 +24,15 @@ export default function Register() {
         const passwordValue = watch('password');
         const passwordAgainValue = watch('passwordAgain');
 
-        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,32}$/;
+        const passwordRegex = regex.PASSWORD_REGEX;
+        console.log(passwordRegex)
 
-        if (!regex.test(passwordValue)) {
-            toast.error('Password must be 8 to 32 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.');
+        if (!passwordRegex.test(passwordValue)) {
+            toast.error(message.PASSWORD_REQUIREMENT_DID_NOT_MATCH);
             return false;
         }
         if (passwordValue !== passwordAgainValue) {
-            toast.error('Passwords do not match');
+            toast.error(message.PASSWORD_NOT_MATCH);
             return false;
         }
 
@@ -38,10 +41,11 @@ export default function Register() {
 
     const validateMobileNumber = () => {
         const mobileNumber = watch('mobilenumber');
-        const regex = /^\d{10}$/;
+        const mobileregex = regex.MOBILE_REGEX;
 
-        if (!regex.test(mobileNumber)) {
-            toast.error('Mobile number must be exactly 10 digits');
+
+        if (!mobileregex.test(mobileNumber)) {
+            toast.error(message.MOBILE_NOT_VALID)
             return false;
         }
         return true;
@@ -53,17 +57,17 @@ export default function Register() {
                 <form className="loginBox" onSubmit={handleSubmit(onSubmit)}>
                     <div className="loginboxTitle">Register User</div>
                     <input placeholder="Firstname" {...register("firstname", { required: true })} className="loginInput" />
-                    {errors.firstname && <span>This field is required</span>}
+                    {errors.firstname && <span>{message.FIELD_REQUIRED}</span>}
                     <input placeholder="Lastname" {...register("lastname", { required: true })} className="loginInput" />
-                    {errors.lastname && <span>This field is required</span>}
-                    <input placeholder="Email" {...register("email", { required: true, pattern: /^[a-z0-9._%+-]+@gmail\.com$/ })} className="loginInput" type="email" />
-                    {errors.email && <p className="validEmail">Please enter a valid email address</p>}
+                    {errors.lastname && <span>{message.FIELD_REQUIRED}</span>}
+                    <input placeholder="Email" {...register("email", { required: true, pattern: regex.EMAIL_REGEX })} className="loginInput" type="email" />
+                    {errors.email && <p className="validEmail">{message.EMAIL_NOT_VALID}</p>}
                     <input placeholder="Mobile no." {...register("mobilenumber", { required: true })} className="loginInput" type="number" onBlur={validateMobileNumber} />
-                    {errors.mobilenumber && <span>This field is required</span>}
+                    {errors.mobilenumber && <span>{message.FIELD_REQUIRED}</span>}
                     <input placeholder="Password" {...register("password", { required: true })} className="loginInput" type="password" onBlur={validatePassword} />
-                    {errors.password && <span>This field is required</span>}
+                    {errors.password && <span>{message.FIELD_REQUIRED}</span>}
                     <input placeholder="Password Again" {...register("passwordAgain", { required: true })} className="loginInput" type="password" />
-                    {errors.passwordAgain && <span>This field is required</span>}
+                    {errors.passwordAgain && <span>{message.FIELD_REQUIRED}</span>}
                     <button className="loginButton" type="submit">Sign Up</button>
                     <button className="loginRegisterButton" onClick={() => navigate("/login")}>
                         Log into Account

@@ -2,12 +2,15 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './updateInformation.css';
 import { useForm } from 'react-hook-form';
+import { useState, useEffect } from 'react';
 import { updateUser, checkEmailUniqueness } from '../../services/Service';
 import toast from 'react-hot-toast';
+import regex from '../../constants/Regex';
+import message from '../../constants/Message';
 
 const UpdateUser = ({ user, onUpdate }) => {
     const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register, handleSubmit, watch, formState: { errors } } = useForm({
         defaultValues: {
             firstname: user.firstname,
             lastname: user.lastname,
@@ -15,31 +18,34 @@ const UpdateUser = ({ user, onUpdate }) => {
             mobilenumber: user.mobilenumber,
         }
     });
+    const email = watch('email');
+    const [emailChanged, setEmailChanged] = useState(false);
 
-    // Define the regex pattern for the mobile number
-    const mobileNumberPattern = /^\d{10}$/;
-    const gmailPattern = /^[a-z0-9._%+-]+@gmail\.com$/;
+    useEffect(() => {
+        if (email !== user.email) {
+            setEmailChanged(true);
+        }
+    }, [email, user.email]);
+    const mobileNumberPattern = regex.MOBILE_REGEX;
+    const gmailPattern = regex.EMAIL_REGEX;
 
     const onSubmit = async (data) => {
         const userId = user._id;
         try {
             // Check if the email is unique
-            if (data.email !== user.email) {
+            if (emailChanged && data.email !== user.email) {
                 const isEmailUnique = await checkEmailUniqueness(data.email);
                 if (!isEmailUnique) {
-                    toast.error("Email is already in use.");
+                    toast.error(message.EMAIL_ALREADY_USED);
                     return;
                 }
 
-                const updatedUser = await updateUser(data, user);
-                console.log('User updated successfully:', updatedUser);
-                onUpdate(updatedUser);
             }
-            else {
-                toast.error("You have entered the same email")
-            }
+            const updatedUser = await updateUser(data, user);
+            console.log(message.SUCCESS_UPDATE, updatedUser);
+            onUpdate(updatedUser);
         } catch (error) {
-            console.error('Failed to update user:', error);
+            console.error(message.ERR_UPDATE, error);
         }
     };
 
@@ -53,7 +59,7 @@ const UpdateUser = ({ user, onUpdate }) => {
                 name="firstname"
                 {...register("firstname", { required: true })}
             />
-            {errors.firstname && <p>First name is required.</p>}
+            {errors.firstname && <p>F{message.FIELD_REQUIRED}</p>}
             <label htmlFor="lastname">Last Name:</label>
             <input
                 type="text"
@@ -61,7 +67,7 @@ const UpdateUser = ({ user, onUpdate }) => {
                 name="lastname"
                 {...register("lastname", { required: true })}
             />
-            {errors.lastname && <p>Last name is required.</p>}
+            {errors.lastname && <p>{message.FIELD_REQUIRED}</p>}
             <label htmlFor="email">Email:</label>
             <input
                 type="email"
@@ -69,7 +75,7 @@ const UpdateUser = ({ user, onUpdate }) => {
                 name="email"
                 {...register("email", { required: true, pattern: gmailPattern })}
             />
-            {errors.email && <p className='MobileNumberValidation'>* Email is not valid</p>}
+            {errors.email && <p className='MobileNumberValidation'>{message.EMAIL_NOT_VALID}</p>}
             <label htmlFor="mobilenumber">Mobile Number:</label>
             <input
                 type="text"
@@ -77,7 +83,7 @@ const UpdateUser = ({ user, onUpdate }) => {
                 name="mobilenumber"
                 {...register("mobilenumber", { required: true, pattern: mobileNumberPattern })}
             />
-            {errors.mobilenumber && <p className='MobileNumberValidation'>* Mobile number is not valid.</p>}
+            {errors.mobilenumber && <p className='MobileNumberValidation'>{message.MOBILE_NOT_VALID}</p>}
             <button type="submit">Update</button>
         </form>
     );

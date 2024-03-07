@@ -18,7 +18,7 @@ export const loginFailure = (error) => ({
     type: 'LOGIN_FAILURE',
     payload: error,
 });
-export const loginCall = (userCredentials) => async (dispatch) => {
+export const loginCall = (userCredentials, navigate) => async (dispatch) => {
     dispatch(loginStart());
 
     try {
@@ -34,6 +34,7 @@ export const loginCall = (userCredentials) => async (dispatch) => {
                     user: user
                 }
                 dispatch(loginSuccess(authUser))
+                navigate('/')
             } else {
                 toast.error("Invalid Password")
                 dispatch(loginFailure('Invalid password'));

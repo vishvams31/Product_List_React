@@ -4,12 +4,13 @@ import { useForm } from 'react-hook-form';
 import { changePassword } from '../../services/Service';
 import toast from 'react-hot-toast';
 import bcrypt from 'bcryptjs';
+import regex from '../../constants/Regex';
+import message from '../../constants/Message';
 
 const ChangePassword = ({ onChangePassword }) => {
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex = regex.PASSWORD_REGEX;
 
-    // Use watch to get the current values of the form fields
     const newPassword = watch('newPassword', '');
     const confirmNewPassword = watch('confirmNewPassword', '');
 
@@ -19,11 +20,11 @@ const ChangePassword = ({ onChangePassword }) => {
         // Verify the current password
         const isCurrentPasswordCorrect = bcrypt.compareSync(data.currentPassword, user.password);
         if (!isCurrentPasswordCorrect) {
-            toast.error("Current password is incorrect.");
+            toast.error(message.ERR_PASSWORD_WRONG);
             return;
         }
         if (data.currentPassword == newPassword) {
-            toast.error("New password cannot be the same")
+            toast.error(message.ERR_PASSWORD_SAME)
             return;
         }
         changePassword(data.newPassword, user);
@@ -39,12 +40,12 @@ const ChangePassword = ({ onChangePassword }) => {
             <label className="change-password-label">
                 New Password:
                 <input type="password" {...register("newPassword", { required: true, pattern: passwordRegex })} className="change-password-input" />
-                {errors.newPassword && <p className='newPassword'>{" *New password does not meet the requirements."}</p>}
+                {errors.newPassword && <p className='newPassword'>{message.PASSWORD_REQUIREMENT_DID_NOT_MATCH}</p>}
             </label>
             <label className="change-password-label">
                 Confirm New Password:
-                <input type="password" {...register("confirmNewPassword", { required: true, validate: value => value === newPassword || "New password and confirm new password do not match." })} className="change-password-input" />
-                {errors.confirmNewPassword && <p className={errors.confirmNewPassword.message === "New password and confirm new password do not match." ? 'error-message' : ''}>{errors.confirmNewPassword.message}</p>}
+                <input type="password" {...register("confirmNewPassword", { required: true, validate: value => value === newPassword || message.PASSWORD_NOT_MATCH })} className="change-password-input" />
+                {errors.confirmNewPassword && <p className={errors.confirmNewPassword.message === message.PASSWORD_NOT_MATCH ? 'error-message' : ''}>{errors.confirmNewPassword.message}</p>}
             </label>
 
 

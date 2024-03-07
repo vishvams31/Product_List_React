@@ -6,13 +6,16 @@ import UpdateInformation from './UpdateInformation'
 import { useNavigate } from 'react-router-dom';
 import Modal from './Modal';
 import ChangePassword from '../../components/changePassword/ChangePassword';
-import { UseSelector } from 'react-redux';
+import ConfirmLogoutModal from '../../components/confirmationLogout/ConfirmationLogout'
+import { UseSelector, useSelector } from 'react-redux';
 import './profile.css'
+import { current } from '@reduxjs/toolkit';
 const Profile = () => {
     const { username } = useParams();
     const [user, setUser] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+    const [showConfirmLogoutModal, setShowConfirmLogoutModal] = useState(false);
 
     const navigate = useNavigate()
 
@@ -33,15 +36,21 @@ const Profile = () => {
         setShowModal(false);
     }
     const handleLogout = () => {
-        const confirmLogout = window.confirm("Are you sure you want to logout?");
-        if (confirmLogout) {
-            // Clear user session
-            // Redirect to login page
-            localStorage.removeItem("user")
-            navigate('/login');
-            window.location.reload()
-        }
+        setShowConfirmLogoutModal(true);
+
     };
+    const handleConfirmLogout = () => {
+        // Clear user session
+        localStorage.removeItem("user");
+        navigate('/login');
+        // window.location.reload()
+        setShowConfirmLogoutModal(false);
+    };
+
+    const handleCancelLogout = () => {
+        setShowConfirmLogoutModal(false);
+    };
+
     if (!user) {
         return <div>Loading...</div>;
     }
@@ -69,6 +78,12 @@ const Profile = () => {
                 <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
                     <UpdateInformation user={user} onUpdate={handleUpdate} />
                 </Modal>
+                <ConfirmLogoutModal
+                    isOpen={showConfirmLogoutModal}
+                    onConfirm={handleConfirmLogout}
+                    onCancel={handleCancelLogout}
+                />
+
             </div>
         </>
     );
