@@ -28,10 +28,12 @@ export const fetchProductDetails = async (id) => {
         return null;
     }
 };
-// services/Service.js
-
-export const handleClick = async (e, password, firstname, lastname, email, mobilenumber, navigate) => {
-    e.preventDefault();
+//register a user
+export const handleClick = async (data, navigate) => {
+    if (data.preventDefault) {
+        data.preventDefault();
+    }
+    const { password, firstname, lastname, email, mobilenumber } = data;
 
     const hashPassword = async (password) => {
         const salt = await bcrypt.genSalt(10);
@@ -40,16 +42,18 @@ export const handleClick = async (e, password, firstname, lastname, email, mobil
     };
 
     try {
-        const hashedPassword = await hashPassword(password.current.value);
+        const hashedPassword = await hashPassword(password);
+
         const userId = Date.now().toString();
         const newUser = {
             id: userId,
-            firstname: firstname.current.value,
-            lastname: lastname.current.value,
-            email: email.current.value,
-            mobilenumber: mobilenumber.current.value,
+            firstname,
+            lastname,
+            email,
+            mobilenumber,
             password: hashedPassword
         };
+
         const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
         existingUsers.push(newUser);
         localStorage.setItem('users', JSON.stringify(existingUsers));
@@ -59,6 +63,7 @@ export const handleClick = async (e, password, firstname, lastname, email, mobil
         console.log(err);
     }
 };
+
 
 
 export const fetchUserDetails = () => {
@@ -125,14 +130,12 @@ export const checkEmailUniqueness = (email) => {
     try {
         // Retrieve the users array from localStorage
         const users = JSON.parse(localStorage.getItem('users')) || [];
-
-        // Check if the email exists in the users array
         const isEmailUnique = !users.some(user => user.email === email);
 
         return isEmailUnique;
     } catch (error) {
         console.error('Failed to check email uniqueness:', error);
-        return false; // Return false in case of an error
+        return false;
     }
 };
 

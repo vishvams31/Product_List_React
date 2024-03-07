@@ -22,6 +22,10 @@ const ChangePassword = ({ onChangePassword }) => {
             toast.error("Current password is incorrect.");
             return;
         }
+        if (data.currentPassword == newPassword) {
+            toast.error("New password cannot be the same")
+            return;
+        }
         changePassword(data.newPassword, user);
         onChangePassword({ currentPassword: data.currentPassword, newPassword: data.newPassword });
     };
@@ -35,13 +39,15 @@ const ChangePassword = ({ onChangePassword }) => {
             <label className="change-password-label">
                 New Password:
                 <input type="password" {...register("newPassword", { required: true, pattern: passwordRegex })} className="change-password-input" />
-                {errors.newPassword && <p>{"New password does not meet the requirements."}</p>}
+                {errors.newPassword && <p className='newPassword'>{" *New password does not meet the requirements."}</p>}
             </label>
             <label className="change-password-label">
                 Confirm New Password:
                 <input type="password" {...register("confirmNewPassword", { required: true, validate: value => value === newPassword || "New password and confirm new password do not match." })} className="change-password-input" />
-                {errors.confirmNewPassword && <p>{errors.confirmNewPassword.message}</p>}
+                {errors.confirmNewPassword && <p className={errors.confirmNewPassword.message === "New password and confirm new password do not match." ? 'error-message' : ''}>{errors.confirmNewPassword.message}</p>}
             </label>
+
+
             <button type="submit" className="change-password-button">Change Password</button>
         </form>
     );

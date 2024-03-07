@@ -6,7 +6,6 @@ export const loginStart = () => ({
     type: 'LOGIN_START',
 });
 export const loginSuccess = (authUser) => (dispatch) => {
-    // console.log(token)
     console.log(authUser)
     dispatch({
         type: 'LOGIN_SUCCESS',

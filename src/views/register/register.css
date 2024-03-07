@@ -93,6 +93,10 @@
     cursor: pointer;
 }
 
+.validEmail {
+    color: red;
+}
+
 @media (max-width: 768px) {
     .loginWrapper {
         flex-direction: column;

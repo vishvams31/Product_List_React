@@ -18,21 +18,26 @@ const UpdateUser = ({ user, onUpdate }) => {
 
     // Define the regex pattern for the mobile number
     const mobileNumberPattern = /^\d{10}$/;
-    const gmailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    const gmailPattern = /^[a-z0-9._%+-]+@gmail\.com$/;
 
     const onSubmit = async (data) => {
         const userId = user._id;
         try {
             // Check if the email is unique
-            const isEmailUnique = await checkEmailUniqueness(data.email);
-            if (!isEmailUnique) {
-                toast.error("Email is already in use.");
-                return;
-            }
+            if (data.email !== user.email) {
+                const isEmailUnique = await checkEmailUniqueness(data.email);
+                if (!isEmailUnique) {
+                    toast.error("Email is already in use.");
+                    return;
+                }
 
-            const updatedUser = await updateUser(data, user);
-            console.log('User updated successfully:', updatedUser);
-            onUpdate(updatedUser);
+                const updatedUser = await updateUser(data, user);
+                console.log('User updated successfully:', updatedUser);
+                onUpdate(updatedUser);
+            }
+            else {
+                toast.error("You have entered the same email")
+            }
         } catch (error) {
             console.error('Failed to update user:', error);
         }

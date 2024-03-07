@@ -11,7 +11,6 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  Navigate
 
 } from "react-router-dom"
 import ProductList from './components/productList/ProductList';
@@ -25,7 +24,6 @@ function App() {
     const authUser = {
       user: user
     }
-    // console.log(authUser)
     if (user) {
       dispatch(loginSuccess(authUser));
     }
@@ -40,7 +38,6 @@ function App() {
           <Route exact path='/login' element={user ? <Home /> : <Login />}></Route>
           <Route exact path='/register' element={<Register />}></Route>
           <Route exact path="/product/:id" element={<ProductDetails />}></Route>
-
           <Route exact path="/profile/:username" element={<Profile />} ></Route>
         </Routes>
         <Toaster />

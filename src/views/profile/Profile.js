@@ -50,6 +50,7 @@ const Profile = () => {
         <>
             <Topbar />
             <div className="profile-page">
+                <div className='welcomeText'>Welcome {username}</div>
                 <div className='profile-content'>
                     <h2>Profile</h2>
                     <p>First Name: {user.firstname}</p>
